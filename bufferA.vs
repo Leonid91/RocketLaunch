@@ -11,11 +11,11 @@ const int primNumSamples = 100 ;
 
 // Colours
 const vec3 smokeCol = vec3(30./255., 31./255., 30./255.) ;
-const vec3 sunCol = vec3(1.0,1.0,1.0) ;
-const vec3 backCol = vec3(206./255., 146./255., 14./255.) ;
-const vec3 skyCol = vec3(135.,206.,250.)/255. ;
-const vec3 rocketCol = vec3(230.,10.,10.)/255. ;
-const vec3 ambientCol = vec3(0.4) ;
+const vec3 sunCol = vec3(1.000,0.000,0.000) ;
+const vec3 backCol = vec3(0.2, 0.2, 0.6) ;
+const vec3 skyCol = vec3(0.306,0.545,0.694)/255. ;
+const vec3 rocketCol = vec3(0.569,0.451,0.451) ;
+const vec3 ambientCol = vec3(0.9) ;
 
 // SmokeVals
 const int octavesSmoke =  12 ;
@@ -297,7 +297,7 @@ vec4 calcRocketColour(in vec3 position,in vec3 direction, in vec3 lightDir) {
         	if (position.y>smokeEnd.y+3.41)
             	col = vec3(.1,.1,.1);
             else
-                col = vec3(.9,.9,.9);
+                col = vec3(0.522,0.400,0.400);
         else {
         	col = vec3(.1,.1,.1);
         }
@@ -306,7 +306,7 @@ vec4 calcRocketColour(in vec3 position,in vec3 direction, in vec3 lightDir) {
 	vec3 lin = vec3(0.0);
     lin += 4.30*dif*vec3(1.00,0.80,0.55);
 	lin += 7.00*spe*vec3(1.00,0.90,0.70)*dif;
-    lin += 1.00*amb ;
+    lin += 2.00*amb ;
 	col = col*lin;
     
     return vec4(col,0.0) ;
@@ -327,7 +327,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     dir.xz = rot2D(dir.xz, 45.);
     dir = normalize(dir) ;
     
-    vec3 cameraPos = vec3(0.0,7.0,3.0*offset) ;
+    vec3 cameraPos = vec3(0.0,7.0-iTime,3.0*offset) ;
     
 
    float lightElev = 10. * 3.14/180. ;
@@ -346,14 +346,16 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             colour = calcRocketColour(cameraPos+dir*rayDistSolid,dir,lightDir) ; 
         } else {
         	colour = primaryRayMarchSmoke(cameraPos+dir*rayDistTrans,dir,lightDir) ; 
-            colour = vec4(mix(colour.rgb,calcRocketColour(cameraPos+dir*rayDistSolid,dir,lightDir).rgb,colour.a),0.0) ;
+            colour = vec4(mix(colour.rgb,calcRocketColour(cameraPos+dir*rayDistSolid,dir,lightDir).rgb,colour.a),1.0) ;
         }
     } else if (isTransPresent) {
-        colour = primaryRayMarchSmoke(cameraPos+dir*rayDistTrans,dir,lightDir) ;
+        if(iTime > 0.3){
+            colour = primaryRayMarchSmoke(cameraPos+dir*rayDistTrans,dir,lightDir) ;
+        }
+        
     } else if (isSolidPresent) {
         colour = calcRocketColour(cameraPos+dir*rayDistSolid,dir,lightDir) ;    
     }
     //vec3 skyCol = calcSkyCol(dir,lightDir) ;
     //colour.rgb = mix(colour.rgb,skyCol,colour.a) ;
     fragColor = vec4(colour.rgb,1.0) ;
-}
