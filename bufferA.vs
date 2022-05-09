@@ -182,7 +182,7 @@ bool isIntersectingRocket(vec3 position, float precis, out float dist) {
     dist = sampleRocketCCy(position) ;
     return dist < precis ;
 }
-                          
+
 bool rayMarchTrans(vec3 startPos, vec3 direction, out float rayDist) {
     vec3 position = startPos ;
     bool intersected = false ;
@@ -202,6 +202,7 @@ bool rayMarchTrans(vec3 startPos, vec3 direction, out float rayDist) {
     
     return false ;
 }
+
 
 bool rayMarchSolids(vec3 startPos, vec3 direction, out float rayDist) {
     vec3 position = startPos ;
@@ -229,6 +230,7 @@ const float scatteringCoeff = 12.5 ;
 const float secSmokeSampleSize = 0.2 ;
 const int secSmokeNumSamples = 5 ;
 
+
 float getIncidentSunlight(vec3 startPos, vec3 lightDir) {
     vec3 position = startPos ;
     vec3 stepVector = lightDir * secSmokeSampleSize ;
@@ -244,8 +246,10 @@ float getIncidentSunlight(vec3 startPos, vec3 lightDir) {
     return extinction ;
 }
 
+
 const float primSmokeSampleSize = 0.1 ;
 const int primSmokeNumSamples = 50 ;
+
 
 vec4 primaryRayMarchSmoke(vec3 startPos, vec3 direction, vec3 lightDir) {
     vec3 position = startPos ;
@@ -267,6 +271,7 @@ vec4 primaryRayMarchSmoke(vec3 startPos, vec3 direction, vec3 lightDir) {
     
     return vec4(colour,extinction) ;    
 }
+
 
 vec3 calcSkyCol(in vec3 direction, in vec3 lightDir) {	
     float sunAmount = max( dot(direction, lightDir), 0.0 );
@@ -345,6 +350,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     bool isTransPresent = rayMarchTrans(cameraPos,dir,rayDistTrans) ;
     bool isSolidPresent = rayMarchSolids(cameraPos,dir,rayDistSolid) ;
     
+    
     if (isTransPresent && isSolidPresent) {
         if (rayDistSolid < rayDistTrans) {
             colour = calcRocketColour(cameraPos+dir*rayDistSolid,dir,lightDir) ; 
@@ -357,7 +363,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     } else if (isSolidPresent) {
         colour = calcRocketColour(cameraPos+dir*rayDistSolid,dir,lightDir) ;    
     }
+    
+    
     vec3 skyCol = calcSkyCol(dir,lightDir) ;
-    colour.rgb = mix(colour.rgb,skyCol,colour.a) ;
+    //colour.rgb = mix(colour.rgb,skyCol,colour.a) ;
     fragColor = vec4(colour.rgb,1.0) ;
 }
