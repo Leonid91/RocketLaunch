@@ -2,6 +2,8 @@
 #define PI 3.1415
 #define MOD2 vec2(3.07965, 7.4235)
 
+const int KEY_SPACEBAR = 32;
+
 // Time Scaling
 #define time iTime*0.1
 
@@ -318,6 +320,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 	vec2 uv = (fragCoord.xy - iResolution.xy * .5) / iResolution.y;
     vec2  m = 2.*((iMouse.xy / iResolution.xy) - 0.5);
     
+    texture(iChannel3, uv); 
+    
     if (iMouse.xy == vec2(0)) {
        m.y = 0.0 ;   
     }
@@ -359,3 +363,4 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     //vec3 skyCol = calcSkyCol(dir,lightDir) ;
     //colour.rgb = mix(colour.rgb,skyCol,colour.a) ;
     fragColor = vec4(colour.rgb,1.0) ;
+}
