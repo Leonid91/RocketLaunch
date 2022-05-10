@@ -3,6 +3,7 @@
 #define MOD2 vec2(3.07965, 7.4235)
 
 const int KEY_SPACEBAR = 32;
+bool isLiftOff = false;
 
 // Time Scaling
 #define time iTime*0.1
@@ -16,7 +17,7 @@ const vec3 smokeCol = vec3(30./255., 31./255., 30./255.) ;
 const vec3 sunCol = vec3(1.000,0.000,0.000) ;
 const vec3 backCol = vec3(0.2, 0.2, 0.6) ;
 const vec3 skyCol = vec3(0.306,0.545,0.694)/255. ;
-const vec3 rocketCol = vec3(0.569,0.451,0.451) ;
+const vec3 rocketCol = vec3(0.569,0.451,0.451) ; 
 const vec3 ambientCol = vec3(0.9) ;
 
 // SmokeVals
@@ -314,13 +315,16 @@ vec4 calcRocketColour(in vec3 position,in vec3 direction, in vec3 lightDir) {
     return vec4(col,0.0) ;
 }
 
+float keyPressed(int keyCode) {
+	return texture(iChannel3, vec2((float(keyCode) + 0.5) / 256., .5/3.)).r;   
+}
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
 	vec2 uv = (fragCoord.xy - iResolution.xy * .5) / iResolution.y;
     vec2  m = 2.*((iMouse.xy / iResolution.xy) - 0.5);
     
-    texture(iChannel3, uv); 
+    texture(iChannel3, uv);
     
     if (iMouse.xy == vec2(0)) {
        m.y = 0.0 ;   
@@ -331,8 +335,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     dir.xz = rot2D(dir.xz, 45.);
     dir = normalize(dir) ;
     
-    vec3 cameraPos = vec3(0.0,7.0-iTime,3.0*offset) ;
+    vec3 cameraPos;
     
+    cameraPos = vec3(0.0, 7.0, 3.0*offset);
+    //float timeElapsed = iTime;
+    isLiftOff = (bool(keyPressed(KEY_SPACEBAR)));
+    if(isLiftOff) {
+        cameraPos = vec3(0.0, 7.0-iTime, 3.0*offset);
+    }
 
    float lightElev = 10. * 3.14/180. ;
    float lightAzi = 90. * 3.14/180. + 20. ;
