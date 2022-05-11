@@ -357,20 +357,34 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     
     if (isTransPresent && isSolidPresent) {
         if (rayDistSolid < rayDistTrans) {
-            colour = calcRocketColour(cameraPos+dir*rayDistSolid,dir,lightDir) ; 
+            colour = calcRocketColour(cameraPos+dir*rayDistSolid,dir,lightDir) ;
+            
         } else {
         	colour = primaryRayMarchSmoke(cameraPos+dir*rayDistTrans,dir,lightDir) ; 
-            colour = vec4(mix(colour.rgb,calcRocketColour(cameraPos+dir*rayDistSolid,dir,lightDir).rgb,colour.a),1.0) ;
+            colour = vec4(mix(colour.rgb,calcRocketColour(cameraPos+dir*rayDistSolid,dir,lightDir).rgb,colour.a),colour.a) ;
         }
+        colour.a = 1.0;
+
     } else if (isTransPresent) {
         if(iTime > 0.3){
             colour = primaryRayMarchSmoke(cameraPos+dir*rayDistTrans,dir,lightDir) ;
         }
+        colour.a = 0.3; 
         
     } else if (isSolidPresent) {
-        colour = calcRocketColour(cameraPos+dir*rayDistSolid,dir,lightDir) ;    
+        colour = calcRocketColour(cameraPos+dir*rayDistSolid,dir,lightDir) ;   
+        colour.a = 1.0;
     }
+    else {
+        colour.a = 0.0;
+    }
+
     //vec3 skyCol = calcSkyCol(dir,lightDir) ;
     //colour.rgb = mix(colour.rgb,skyCol,colour.a) ;
-    fragColor = vec4(colour.rgb,1.0) ;
+    
+    
+        
+    // Old
+    //colour.r = colour.a;
+    fragColor = colour;
 }

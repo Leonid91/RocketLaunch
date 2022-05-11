@@ -27,15 +27,15 @@
 // 0: one 3d texture lookup
 // 1: two 2d texture lookups with hardware interpolation
 // 2: two 2d texture lookups with software interpolation
-#define NOISE_METHOD 1
+#define NOISE_METHOD 2
 
 // 0: no LOD
 // 1: yes LOD
-#define USE_LOD 1
+#define USE_LOD 0
 
 // 0: sunset look
 // 1: bright look
-#define LOOK 1
+#define LOOK 0
 
 mat3 setCamera( in vec3 ro, in vec3 ta, float cr )
 {
@@ -278,6 +278,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     mat3 ca = setCamera( ro, ta, 0.07*cos(0.25*iTime) );
     // ray
     vec3 rd = ca * normalize( vec3(p.xy,1.5));
-    
-    fragColor = render( ro, rd, ivec2(fragCoord-0.5) );
+    vec4 col = render( ro, rd, ivec2(fragCoord-0.5) );
+    col.a = 0.0;
+    //col.r = col.a;
+    fragColor = col;
 }
