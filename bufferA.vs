@@ -339,16 +339,36 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     
     cameraPos = vec3(0.0, 7.0, 3.0*offset);
     //float timeElapsed = iTime;
-    isLiftOff = (bool(keyPressed(KEY_SPACEBAR)));
-    if(isLiftOff) {
-        cameraPos = vec3(0.0, 7.0-iTime, 3.0*offset);
-    }
-
-   float lightElev = 10. * 3.14/180. ;
-   float lightAzi = 90. * 3.14/180. + 20. ;
-   vec3 lightDir = vec3(cos(lightAzi)*cos(lightElev),sin(lightElev),sin(lightAzi)*cos(lightElev));
-
+    //isLiftOff = (bool(keyPressed(KEY_SPACEBAR)));
+    //if(isLiftOff) {
+        
+    //}
     
+    float timeCounter = 0.0;
+    timeCounter = iTime;
+    const float startVerticalPosition = 7.0;
+    float verticalPosition = startVerticalPosition;
+    
+    if(timeCounter < 5.){
+        verticalPosition = 7.0;
+        verticalPosition = verticalPosition - timeCounter;
+        cameraPos = vec3(0.0, verticalPosition, 3.0*offset);
+    }
+    else if(timeCounter < 10. && timeCounter > 5.){
+        
+        cameraPos = vec3(0.0, startVerticalPosition - (timeCounter- verticalPosition), 3.0*offset);
+    }
+    else{
+       
+        cameraPos = vec3(0.0, startVerticalPosition - (timeCounter- verticalPosition), 3.0*offset);
+    }
+    
+    //cameraPos = vec3(0.0, 7.0-iTime, 3.0*offset);
+
+    float lightElev = 10. * 3.14/180. ;
+    float lightAzi = 90. * 3.14/180. + 20. ;
+    vec3 lightDir = vec3(cos(lightAzi)*cos(lightElev),sin(lightElev),sin(lightAzi)*cos(lightElev));
+
     float rayDistTrans = 0.0 ;
     float rayDistSolid = 0.0 ;
     vec4 colour = vec4(vec3(0.0),1.0) ;
