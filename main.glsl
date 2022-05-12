@@ -7,15 +7,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     
     float counter = 0.0;
     counter = iTime;
-    while(counter < 5.){
+    if(counter < 5.){
         fragColor = mix (col_c, col_a, col_a.a);
     }
-    while(counter < 10. && counter > 5.){
+    else if(counter < 10. && counter > 5.){
         fragColor = mix (col_b, col_a, col_a.a);
     }
-    while(counter < 15. && counter > 10.){
-        counter = 0.;
-    }
+
     
     //Use this for debug
     //fragColor = mix (col_b, col_a, col_a.a);
