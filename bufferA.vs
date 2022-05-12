@@ -356,11 +356,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
     else if(timeCounter < 10. && timeCounter > 5.){
         
-        cameraPos = vec3(0.0, startVerticalPosition - (timeCounter- verticalPosition), 3.0*offset);
+        cameraPos = vec3(0.0, startVerticalPosition - (timeCounter - verticalPosition), 3.0*offset);
     }
-    else{
-       
-        cameraPos = vec3(0.0, startVerticalPosition - (timeCounter- verticalPosition), 3.0*offset);
+    else if(timeCounter < 15. && timeCounter > 10.){
+        cameraPos = vec3(0.0, startVerticalPosition - (timeCounter - verticalPosition), 3.0*offset);
     }
     
     //cameraPos = vec3(0.0, 7.0-iTime, 3.0*offset);

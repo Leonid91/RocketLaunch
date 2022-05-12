@@ -4,6 +4,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec4 col_a = texture(iChannel0, uv);
     vec4 col_b = texture(iChannel1, uv);
     vec4 col_c = texture(iChannel2, uv);
+    vec4 col_d = texture(iChannel3, uv);
     
     float counter = 0.0;
     counter = iTime;
@@ -12,6 +13,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
     else if(counter < 10. && counter > 5.){
         fragColor = mix (col_b, col_a, col_a.a);
+    }
+    else if(counter < 15. && counter > 10.){
+        fragColor = mix (col_d, col_a, col_a.a);
     }
 
     
